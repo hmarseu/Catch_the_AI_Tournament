@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 315734ddd6ec5ad46949192a6fe8d82c, type: 3}
+  m_Name: 3x4
+  m_EditorClassIdentifier: 
+  X: 3
+  Y: 4
+  BoardCases:
+  - Position: {x: 0, y: 0}
+    PawnToSpawn: 2
+    PawnData: {fileID: 11400000, guid: 178e43cc76389354583638d808ea7bb4, type: 2}
+    Camp: 1
+  - Position: {x: 1, y: 0}
+    PawnToSpawn: 4
+    PawnData: {fileID: 11400000, guid: cee17ac62db2a0447a0447055126dae4, type: 2}
+    Camp: 1
+  - Position: {x: 2, y: 0}
+    PawnToSpawn: 3
+    PawnData: {fileID: 11400000, guid: c8bbae9ffa1024b43acc50a3689056b4, type: 2}
+    Camp: 1
+  - Position: {x: 1, y: 1}
+    PawnToSpawn: 0
+    PawnData: {fileID: 11400000, guid: 73f20c1085c8cd142b119925d2cefe80, type: 2}
+    Camp: 1
+  - Position: {x: 1, y: 2}
+    PawnToSpawn: 0
+    PawnData: {fileID: 11400000, guid: 73f20c1085c8cd142b119925d2cefe80, type: 2}
+    Camp: 2
+  - Position: {x: 0, y: 3}
+    PawnToSpawn: 3
+    PawnData: {fileID: 11400000, guid: c8bbae9ffa1024b43acc50a3689056b4, type: 2}
+    Camp: 2
+  - Position: {x: 1, y: 3}
+    PawnToSpawn: 4
+    PawnData: {fileID: 11400000, guid: cee17ac62db2a0447a0447055126dae4, type: 2}
+    Camp: 2
+  - Position: {x: 2, y: 3}
+    PawnToSpawn: 2
+    PawnData: {fileID: 11400000, guid: 178e43cc76389354583638d808ea7bb4, type: 2}
+    Camp: 2

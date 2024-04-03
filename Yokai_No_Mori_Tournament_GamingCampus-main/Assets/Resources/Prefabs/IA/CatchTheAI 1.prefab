@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7996712710071889181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8941500187317661740}
+  - component: {fileID: 7409002212582395587}
+  - component: {fileID: 3884619275148353319}
+  m_Layer: 0
+  m_Name: CatchTheAI 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8941500187317661740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7996712710071889181}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7409002212582395587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7996712710071889181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a8d67f571cf94b4d8a93cbb441472bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groupName: CatchTheAI
+  idPlayer: -1
+  isAI: 1
+--- !u!114 &3884619275148353319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7996712710071889181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e88a2aa844a41944f8e769a5f51212b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Kodama: {fileID: 11400000, guid: 08691d56440a6f44fb6af745ce9ff210, type: 2}
+  KodamaSamourai: {fileID: 11400000, guid: 187506467c7af24479881dcbff86f379, type: 2}
+  Kitsune: {fileID: 11400000, guid: caf3b0ccb2cb96b48853d9145d88a868, type: 2}
+  Koropokkuru: {fileID: 11400000, guid: 5671973f1c3527c41984aeac913b9f70, type: 2}
+  Tanuki: {fileID: 11400000, guid: 5d7ccbf8bca5cf44786c8045f6df31c8, type: 2}
