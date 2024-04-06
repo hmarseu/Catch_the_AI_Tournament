@@ -220,7 +220,7 @@ namespace YokaiNoMori.General
                 //Debug.Log("====== TURN PLAYER ======");
                 try
                 {
-                    Debug.Log("Current player : " + CurrentPlayer);
+                    //Debug.Log("Current player : " + CurrentPlayer);
                     CurrentPlayer.GetDatas();
                     CurrentPlayer.StartTurn();
                 }

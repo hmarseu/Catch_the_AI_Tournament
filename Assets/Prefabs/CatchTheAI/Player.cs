@@ -76,7 +76,8 @@ namespace catchTheAI
             //Debug.Log($"pieceid + position : {bestMove} ");
 
             // get a selectedPiece to play
-            IPawn pawnTarget = GetPieceById((int)bestMove.z);
+            Debug.Log($"piece id : {bestMove.z}");
+            IPawn pawnTarget = GetPieceById((int)bestMove.z,idPlayer);
 
             // get a postion where to move
             Vector2Int newPosition = new Vector2Int((int)bestMove.x, (int)bestMove.y);
@@ -93,8 +94,16 @@ namespace catchTheAI
             }
             //Debug.Log("Position : (" + newPosition.x + ", " + newPosition.y + "), index : " + bestMove.z);
 
-                // do action
-                boardManager.DoAction(pawnTarget, newPosition, actionType);
+            // do action
+
+           //test changement dans git
+     
+            Debug.Log($"actiontype : {actionType}");
+   
+            Debug.Log($"position : {newPosition} ");
+            Debug.Log($"pawn : {pawnTarget?.GetPawnType()}");
+
+            boardManager.DoAction(pawnTarget, newPosition, actionType);
 
           
         }
@@ -132,6 +141,7 @@ namespace catchTheAI
         
         public ECampType GetPieceCamp(int idPiece)
         {
+            //Debug.Log(idPiece);
             if (idPiece < 0)
             {
                 return ECampType.PLAYER_TWO;
@@ -142,10 +152,10 @@ namespace catchTheAI
             }
             else
             {
-                throw new System.NotImplementedException();
+                return ECampType.NONE;
             }
         }
-        public IPawn GetPieceById(int id)
+        public IPawn GetPieceById(int id,int idPlayer)
         {
             ECampType pieceCamp = GetPieceCamp(id);
             List<IPawn> pawnsInBoard = boardManager.GetPawnsOnBoard(pieceCamp);
@@ -153,7 +163,7 @@ namespace catchTheAI
             // is in board?
             foreach (Pawn pawn in pawnsInBoard)
             {
-                int idPawn = TransformIpawnIntoId(pawn);
+                int idPawn = TransformIpawnIntoId(pawn, idPlayer);
                 if (idPawn == id)
                 {
                     return pawn;
@@ -165,7 +175,7 @@ namespace catchTheAI
 
             foreach (Pawn pawn in pawnsInBoard)
             {
-                int idPawn = TransformIpawnIntoId(pawn);
+                int idPawn = TransformIpawnIntoId(pawn, idPlayer);
                 if (idPawn == id)
                 {
                     return pawn;
@@ -189,28 +199,28 @@ namespace catchTheAI
                 ECampType camp = competitor.GetCamp();
                 int idPlayer = TransformECampIntoId(camp);
 
-                int idPiece = idPlayer * TransformIpawnIntoId(pawn);
+                int idPiece = TransformIpawnIntoId(pawn,idPlayer);
 
                 // Debug.LogWarning("opela : " + new Vector3Int(pos.x, pos.y, idPiece));
                 arrayInformations.Add(new Vector3Int(pos.x, pos.y, idPiece));
             }
             return arrayInformations;
         }
-        private int TransformIpawnIntoId(IPawn pawn)
+        private int TransformIpawnIntoId(IPawn pawn,int idPlayer)
         {
             EPawnType type = pawn.GetPawnType();
             switch (type)
             {
                 case EPawnType.Kodama:
-                    return 1;
+                    return 1* idPlayer;
                 case EPawnType.KodamaSamurai:
-                    return 2;
+                    return 2 * idPlayer;
                 case EPawnType.Tanuki:
-                    return 3;
+                    return 3 * idPlayer;
                 case EPawnType.Kitsune:
-                    return 4;
+                    return 4 * idPlayer;
                 case EPawnType.Koropokkuru:
-                    return 5;
+                    return 5 * idPlayer;
             }
             return 0;
         }

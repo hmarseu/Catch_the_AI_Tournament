@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Image: {fileID: 0}
   ePawnType: 0
-  PossibleMoves: 000000000001000000
+  PossibleMoves: 000000000000000100

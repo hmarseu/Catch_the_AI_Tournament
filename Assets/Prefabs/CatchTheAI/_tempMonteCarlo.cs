@@ -105,7 +105,7 @@ namespace catchTheAI
                 }
                 else
                 {
-                    Debug.Log("Aucun meilleur coup trouve.");
+                    Debug.Log($"Aucun meilleur coup trouve pourtant il y avait {rootNode.childNodes.Count} enfants ");
                 }
             }
             return new Vector4();
@@ -254,7 +254,7 @@ namespace catchTheAI
             {
                 foreach (var pieceid in reserve)
                 {
-                    posidpiece.Add(new Vector3(-1, -1, TransformIpawnIntoId(pieceid)));
+                    posidpiece.Add(new Vector3(-1, -1, TransformIpawnIntoId(pieceid,node.playerid)));
                 }
 
             }
@@ -286,7 +286,12 @@ namespace catchTheAI
             {
                 node.visits++;
                 node.wins += result;
-                node = node.parent;
+                if (node.parent != null)
+                {
+                    node = node.parent;
+                   
+                }
+                else break;
             }
         }
 
@@ -496,7 +501,7 @@ namespace catchTheAI
             {
                 for (int i = 0; i < reserve.Count; i++)
                 {
-                    int pieceV = TransformIpawnIntoId(reserve[i]);
+                    int pieceV = TransformIpawnIntoId(reserve[i],playerid);
                     positionArrayAndPiecesId.Add(new Vector3(-1, -1, pieceV));
                 }
             }
@@ -620,21 +625,21 @@ namespace catchTheAI
             return new Vector2(-1, -1); // La pièce n'a pas été trouvée sur le plateau
         }
 
-        private int TransformIpawnIntoId(IPawn pawn)
+        private int TransformIpawnIntoId(IPawn pawn,int idPlayer)
         {
             EPawnType type = pawn.GetPawnType();
             switch (type)
             {
                 case EPawnType.Kodama:
-                    return 1;
+                    return 1*idPlayer;
                 case EPawnType.KodamaSamurai:
-                    return 2;
+                    return 2 * idPlayer;
                 case EPawnType.Tanuki:
-                    return 3;
+                    return 3 * idPlayer;
                 case EPawnType.Kitsune:
-                    return 4;
+                    return 4 * idPlayer;
                 case EPawnType.Koropokkuru:
-                    return 5;
+                    return 5 * idPlayer;
             }
             return 0;
         }
