@@ -75,13 +75,6 @@ namespace catchTheAI
             Vector4 bestMove = ia.MonteCarloSearch(new Node(idPlayer, new Vector4(), null, boardId, PlayersReserve), 1000,boardManager);
             //Debug.Log($"pieceid + position : {bestMove} ");
 
-            // get a selectedPiece to play
-            Debug.Log($"piece id : {bestMove.z}");
-            IPawn pawnTarget = GetPieceById((int)bestMove.z,idPlayer);
-
-            // get a postion where to move
-            Vector2Int newPosition = new Vector2Int((int)bestMove.x, (int)bestMove.y);
-
             // get selected action type
             EActionType actionType;
             if (bestMove.w == 1)
@@ -92,6 +85,14 @@ namespace catchTheAI
             {
                 actionType = EActionType.MOVE;
             }
+
+            // get a selectedPiece to play
+            Debug.Log($"piece id : {bestMove.z}");
+            IPawn pawnTarget = GetPieceById((int)bestMove.z,idPlayer, actionType);
+
+            // get a postion where to move
+            Vector2Int newPosition = new Vector2Int((int)bestMove.x, (int)bestMove.y);
+
             //Debug.Log("Position : (" + newPosition.x + ", " + newPosition.y + "), index : " + bestMove.z);
 
             // do action
@@ -102,6 +103,16 @@ namespace catchTheAI
    
             Debug.Log($"position : {newPosition} ");
             Debug.Log($"pawn : {pawnTarget?.GetPawnType()}");
+
+            if (actionType == EActionType.PARACHUTE)
+            {
+                if(pawnTarget.GetCurrentPosition() != new Vector2Int(-1, -1))
+                {
+                    Debug.LogError("Get position : " + pawnTarget.GetCurrentPosition());
+                    Debug.LogError("OMG WRONG PIECE");
+                }
+                Debug.Log(pawnTarget.GetPawnType() + " + " + newPosition + " + " + actionType);
+            }
 
             boardManager.DoAction(pawnTarget, newPosition, actionType);
 
@@ -155,32 +166,43 @@ namespace catchTheAI
                 return ECampType.NONE;
             }
         }
-        public IPawn GetPieceById(int id,int idPlayer)
+        public IPawn GetPieceById(int id,int idPlayer, EActionType actionType)
         {
+
             ECampType pieceCamp = GetPieceCamp(id);
-            List<IPawn> pawnsInBoard = boardManager.GetPawnsOnBoard(pieceCamp);
 
             // is in board?
-            foreach (Pawn pawn in pawnsInBoard)
+            if (actionType == EActionType.MOVE)
             {
-                int idPawn = TransformIpawnIntoId(pawn, idPlayer);
-                if (idPawn == id)
+                List<IPawn> pawnsInBoard = boardManager.GetPawnsOnBoard(pieceCamp);
+
+                foreach (Pawn pawn in pawnsInBoard)
                 {
-                    return pawn;
+                    int idPawn = TransformIpawnIntoId(pawn, idPlayer);
+                    if (idPawn == id)
+                    {
+                        return pawn;
+                    }
                 }
             }
 
             // is in cemetery?
-            List<IPawn> pawnsInCemetery = boardManager.GetReservePawnsByPlayer(pieceCamp);
-
-            foreach (Pawn pawn in pawnsInBoard)
+            if (actionType == EActionType.PARACHUTE)
             {
-                int idPawn = TransformIpawnIntoId(pawn, idPlayer);
-                if (idPawn == id)
+                List<IPawn> pawnsInCemetery = boardManager.GetReservePawnsByPlayer(pieceCamp);
+
+                foreach (Pawn pawn in pawnsInCemetery)
                 {
-                    return pawn;
+                    int idPawn = TransformIpawnIntoId(pawn, idPlayer);
+                    if (idPawn == id)
+                    {
+                        return pawn;
+                    }
                 }
             }
+
+            // not found
+            Debug.LogError("piece not found wtf");
             return null;
         }
 
