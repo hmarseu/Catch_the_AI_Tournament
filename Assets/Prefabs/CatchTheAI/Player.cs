@@ -87,7 +87,6 @@ namespace catchTheAI
             }
 
             // get a selectedPiece to play
-            Debug.Log($"piece id : {bestMove.z}");
             IPawn pawnTarget = GetPieceById((int)bestMove.z,idPlayer, actionType);
 
             // get a postion where to move
@@ -95,9 +94,7 @@ namespace catchTheAI
 
             //Debug.Log("Position : (" + newPosition.x + ", " + newPosition.y + "), index : " + bestMove.z);
 
-            // do action
-
-           //test changement dans git
+           /*
      
             Debug.Log($"actiontype : {actionType}");
    
@@ -113,6 +110,7 @@ namespace catchTheAI
                 }
                 Debug.Log(pawnTarget.GetPawnType() + " + " + newPosition + " + " + actionType);
             }
+           */
 
             boardManager.DoAction(pawnTarget, newPosition, actionType);
 
@@ -202,7 +200,6 @@ namespace catchTheAI
             }
 
             // not found
-            Debug.LogError("piece not found wtf");
             return null;
         }
 
@@ -215,16 +212,18 @@ namespace catchTheAI
             foreach (IPawn pawn in pawns)
             {
                 Vector2Int pos = pawn.GetCurrentPosition();
-                if (pos == new Vector2Int(-1, -1)) break; // break if in cemetery
+                // stop if in cemetery
+                if (pos != new Vector2Int(-1, -1))
+                {
+                    ICompetitor competitor = pawn.GetCurrentOwner();
+                    ECampType camp = competitor.GetCamp();
+                    int idPlayer = TransformECampIntoId(camp);
 
-                ICompetitor competitor = pawn.GetCurrentOwner();
-                ECampType camp = competitor.GetCamp();
-                int idPlayer = TransformECampIntoId(camp);
+                    int idPiece = TransformIpawnIntoId(pawn, idPlayer);
 
-                int idPiece = TransformIpawnIntoId(pawn,idPlayer);
-
-                // Debug.LogWarning("opela : " + new Vector3Int(pos.x, pos.y, idPiece));
-                arrayInformations.Add(new Vector3Int(pos.x, pos.y, idPiece));
+                    // Debug.LogWarning("opela : " + new Vector3Int(pos.x, pos.y, idPiece));
+                    arrayInformations.Add(new Vector3Int(pos.x, pos.y, idPiece));
+                }
             }
             return arrayInformations;
         }
@@ -272,7 +271,6 @@ namespace catchTheAI
 
         private int[,] CreateIntArray(List<Vector3Int> arrayInformations, int heightArray, int widthArray)
         {
-            Debug.LogWarning("Updating the array : ");
             int[,] newArray = new int[heightArray, widthArray];
 
             // init empty array
@@ -295,11 +293,9 @@ namespace catchTheAI
                 if (x >= 0 && y < widthArray && y >= 0 && x < heightArray)
                 {
                     newArray[x, y] = value;
-                    Debug.LogWarning("Position in the array : (" + x + ", " + y + ", " + value + ")");
                 }
-                else Debug.LogError("Position out of the array : (" + x + ", " + y + ", " + value + ")");
             }
-            LogPieceIds(newArray);
+            // LogPieceIds(newArray);
             return newArray;
         }
 
