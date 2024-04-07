@@ -54,7 +54,12 @@ namespace YokaiNoMori.General
 
         public void AddError(ICompetitor competitor, EValidationType errorOccured)
         {
-            Debug.Log($"Ajout ERREUR {errorOccured} : {competitor.GetName()}");
+            if (errorOccured == EValidationType.KOROPPOKURU_CHECKMATE)
+            {
+                Debug.LogWarning($"Ajout INFO {errorOccured} : {competitor.GetName()}");
+                return;
+            }
+            Debug.LogError($"Ajout ERREUR {errorOccured} : {competitor.GetName()}");
             CompetitorsList.First(x => x.CurrentCompetitor == competitor).CurrentErrorOccured++;
         }
 
