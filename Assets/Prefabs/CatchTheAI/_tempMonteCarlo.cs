@@ -6,6 +6,7 @@ using System.Threading;
 using UnityEngine;
 using YokaiNoMori.Enumeration;
 using YokaiNoMori.Interface;
+using UnityEditor.Experimental.GraphView;
 
 namespace catchTheAI
 {
@@ -115,16 +116,16 @@ namespace catchTheAI
         {
             Node bestChild = null;
             double maxScore = double.MinValue;
-            Debug.Log(node.childNodes.Count);
+            //Debug.Log(node.childNodes.Count);
             foreach (Node child in node.childNodes)
             {
                 if (child.move.w ==1)
                 {
-                    Debug.Log($"parachute : {child.move} et score {child.wins}");
+                    //Debug.Log($"parachute : {child.move} et score {child.wins}");
                 }
                 else
                 {
-                    Debug.Log($"move : {child.move} et score {child.wins}");
+                   // Debug.Log($"move : {child.move} et score {child.wins}");
                 }
                 // Vous pouvez �galement choisir le meilleur enfant en utilisant la valeur UCB ici
                 double ucbValue = child.ScoreValue();
@@ -195,7 +196,7 @@ namespace catchTheAI
 
                 foreach (Vector3 piece in playerPieces)
                 {
-                    List<Vector4> piecesMoves = GetValidMoves(piece, currentPlayer,node.piecesPosition);
+                    List<Vector4> piecesMoves = GetValidMoves(piece, currentPlayer,InverserMatrice(node.piecesPosition));
                     validMoves.AddRange(piecesMoves);
                 }
 
@@ -217,8 +218,9 @@ namespace catchTheAI
                 else if (IsWinner(currentBoard, -currentPlayer))
                 {
                     //Debug.Log("coup finale pour l'adversaire");
-                    score -= 9999999999999; // Le joueur adverse a gagn�, attribuer un score tr�s bas
+                    score = -999999999999999; // Le joueur adverse a gagn�, attribuer un score tr�s bas
                 }
+                
                 else
                 {
 
@@ -229,9 +231,8 @@ namespace catchTheAI
                     }
                     else
                     {
-                        if (hasMorePieces(currentBoard, currentPlayer))
+                        if (korSafe(currentBoard, -currentPlayer))
                         {
-                            //Debug.Log("j'ai plus de piece");
                             score += 50000;
                         }
                         else
@@ -269,7 +270,7 @@ namespace catchTheAI
 
             foreach (Vector3 piece in posidpiece)
             {
-                List<Vector4> moves = GetValidMoves(piece, node.playerid,node.piecesPosition);
+                List<Vector4> moves = GetValidMoves(piece, node.playerid, InverserMatrice(node.piecesPosition));
                 //Debug.Log($"id joueur: {node.playerid}");
                 foreach (Vector4 move in moves)
                 {
@@ -604,7 +605,7 @@ namespace catchTheAI
                     {
                         // vérifier si la pièce voisine en question peut se déplacer vers le roi
                         Vector3 piecePos = new Vector3(i, j, simulatedBoard[i, j]);
-                        List<Vector4> possibleMoves = GetValidMoves(piecePos, opponentPlayer,simulatedBoard);
+                        List<Vector4> possibleMoves = GetValidMoves(piecePos, opponentPlayer, InverserMatrice(simulatedBoard));
                         foreach (Vector4 possibleMove in possibleMoves)
                         {
                             if (possibleMove.x == kingPosition.x && possibleMove.y == kingPosition.y)
@@ -655,5 +656,23 @@ namespace catchTheAI
             }
             return 0;
         }
+        // Méthode pour inverser une matrice
+        public int[,] InverserMatrice(int[,] matrice)
+        {
+            int taille = matrice.GetLength(0);
+            for (int i = 0; i < taille / 2; i++)
+            {
+                for (int j = 0; j < taille; j++)
+                {
+                    int temp = matrice[i, j];
+                    matrice[i, j] = matrice[taille - 1 - i, j];
+                    matrice[taille - 1 - i, j] = temp;
+                }
+            }
+            return matrice;
+        }
+
     }
+
+
 }
