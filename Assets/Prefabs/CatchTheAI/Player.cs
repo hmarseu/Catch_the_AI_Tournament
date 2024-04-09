@@ -58,7 +58,7 @@ namespace catchTheAI
 
         public void StartTurn()
         {
-           
+            Debug.Log($"{myCamp} id player : {idPlayer}");
             // if the player is an IA
            
             // get its cemetery

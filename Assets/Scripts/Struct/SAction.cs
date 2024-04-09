@@ -31,7 +31,7 @@ namespace YokaiNoMori.Struct
         {
             StringBuilder debugToShow = new StringBuilder($"Joueur : {CampType} \nAction : {ActionType} \nPawn : {PawnType} \ncurrent position : {StartPosition} \nnew Position : {NewPosition} ");
             if (TakedPawn != null && ActionType == EActionType.MOVE)
-                debugToShow.Append($"- Pawn captured : {TakedPawn}");
+                debugToShow.Append($"- Pawn captured : {TakedPawn.GetPawnType()}");
 
             Debug.Log(debugToShow);
         }

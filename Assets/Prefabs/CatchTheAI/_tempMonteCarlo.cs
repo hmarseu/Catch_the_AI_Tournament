@@ -115,9 +115,17 @@ namespace catchTheAI
         {
             Node bestChild = null;
             double maxScore = double.MinValue;
+            Debug.Log(node.childNodes.Count);
             foreach (Node child in node.childNodes)
             {
-                //Debug.Log(child.wins);
+                if (child.move.w ==1)
+                {
+                    Debug.Log($"parachute : {child.move} et score {child.wins}");
+                }
+                else
+                {
+                    Debug.Log($"move : {child.move} et score {child.wins}");
+                }
                 // Vous pouvez �galement choisir le meilleur enfant en utilisant la valeur UCB ici
                 double ucbValue = child.ScoreValue();
                 if (ucbValue > maxScore)
@@ -187,7 +195,7 @@ namespace catchTheAI
 
                 foreach (Vector3 piece in playerPieces)
                 {
-                    List<Vector4> piecesMoves = GetValidMoves(piece, currentPlayer);
+                    List<Vector4> piecesMoves = GetValidMoves(piece, currentPlayer,node.piecesPosition);
                     validMoves.AddRange(piecesMoves);
                 }
 
@@ -261,7 +269,7 @@ namespace catchTheAI
 
             foreach (Vector3 piece in posidpiece)
             {
-                List<Vector4> moves = GetValidMoves(piece, node.playerid);
+                List<Vector4> moves = GetValidMoves(piece, node.playerid,node.piecesPosition);
                 //Debug.Log($"id joueur: {node.playerid}");
                 foreach (Vector4 move in moves)
                 {
@@ -353,14 +361,17 @@ namespace catchTheAI
             {
                 for (int k = 0; k < height; k++)
                 {
-                    if (array[i, k] == 10 * playerid)
+                    if (array[i, k] == 5 * playerid)
                     {
                         korPosition = new Vector2(i, k);
                     }
-
+       
                 }
             }
-
+            if (korPosition == new Vector2())
+            {
+                return false;
+            }
             bool otherThanKor = false;
 
             // verificate if the king is in danger 
@@ -382,7 +393,7 @@ namespace catchTheAI
 
             return !otherThanKor;
         }
-        private List<Vector4> GetValidMoves(Vector3 posplusidpiece, int player)
+        private List<Vector4> GetValidMoves(Vector3 posplusidpiece, int player, int[,] tab)
         {
             //valid moves pos x,y , idpiece , isParachuting
             SOPiece so = pieceDataDictionnary[(int)posplusidpiece.z];
@@ -390,13 +401,13 @@ namespace catchTheAI
             if (posplusidpiece.x < 0)
             {
                 // c'est un parachutage 
-                for (int i = 0; i < boardTab.GetLength(0); i++)
+                for (int i = 0; i < tab.GetLength(0); i++)
                 {
-                    for (int k = 0; k < boardTab.GetLength(1); k++)
+                    for (int k = 0; k < tab.GetLength(1); k++)
                     {
                         int newX = i;
                         int newY = k;
-                        if (IsInsideBoard(newX, newY) && IsReachableParachuting(new Vector2(newX, newY)))
+                        if (IsInsideBoard(newX, newY,tab) && IsReachableParachuting(new Vector2(newX, newY),tab))
                         {
                             validMoves.Add(new Vector4(newX, newY, posplusidpiece.z, 1));
                         }
@@ -427,7 +438,7 @@ namespace catchTheAI
                     {
                         int newX = (int)posplusidpiece.x + deltaX[i];
                         int newY = (int)posplusidpiece.y + deltaY[i];
-                        if (IsInsideBoard(newX, newY) && IsReachable(new Vector2(newX, newY), player))
+                        if (IsInsideBoard(newX, newY, tab) && IsReachable(new Vector2(newX, newY), player, tab))
                         {
                             validMoves.Add(new Vector4(newX, newY, posplusidpiece.z, 0));
                         }
@@ -437,33 +448,34 @@ namespace catchTheAI
             return validMoves;
         }
 
-        private bool IsInsideBoard(int x, int y)
+        private bool IsInsideBoard(int x, int y, int[,] tab)
         {
-            if (boardTab == null || boardTab.Length == 0)
+            if (tab == null || tab.Length == 0)
             {
                 Debug.LogError("tempBoardArray is null or empty");
                 return false;
             }
 
-            int numRows = boardTab.GetLength(0);
-            int numCols = boardTab.GetLength(1);
+            int numRows = tab.GetLength(0);
+            int numCols = tab.GetLength(1);
             return x >= 0 && x < numRows && y >= 0 && y < numCols;
         }
-        private bool IsReachableParachuting(Vector2 pos)
+        private bool IsReachableParachuting(Vector2 pos, int[,] tab)
         {
-            if (boardTab[(int)pos.x, (int)pos.y] != 0)
+            if (tab[(int)pos.x, (int)pos.y] != 0)
             {
                 return false;
             }
             return true;
         }
-        private bool IsReachable(Vector2 pos, int player)
+        private bool IsReachable(Vector2 pos, int player, int[,] tab)
         {
-            if (boardTab[(int)pos.x, (int)pos.y] != 0)
+            if (tab[(int)pos.x, (int)pos.y] != 0)
             {
-                int pieceValue = boardTab[(int)pos.x, (int)pos.y];
+                int pieceValue = tab[(int)pos.x, (int)pos.y];
                 if (Math.Sign(pieceValue) != Math.Sign(player))
                 {
+                    //Debug.Log($"joueur : {player} piece : {pieceValue}");
                     return true;
                 }
                 else if (Math.Sign(pieceValue) == Math.Sign(player))
@@ -472,7 +484,7 @@ namespace catchTheAI
                 }
                 else
                 {
-                    return true;
+                    return false;
                 }
             }
             return true;
@@ -592,7 +604,7 @@ namespace catchTheAI
                     {
                         // vérifier si la pièce voisine en question peut se déplacer vers le roi
                         Vector3 piecePos = new Vector3(i, j, simulatedBoard[i, j]);
-                        List<Vector4> possibleMoves = GetValidMoves(piecePos, opponentPlayer);
+                        List<Vector4> possibleMoves = GetValidMoves(piecePos, opponentPlayer,simulatedBoard);
                         foreach (Vector4 possibleMove in possibleMoves)
                         {
                             if (possibleMove.x == kingPosition.x && possibleMove.y == kingPosition.y)
